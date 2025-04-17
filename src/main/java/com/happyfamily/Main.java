@@ -60,8 +60,17 @@ public class Main {
         System.out.println("-----------------------------------");
         family.printChildren();
 
+        System.out.println("-----------------------------------");
 
-        family.addChild(hasan);
+        try {
+            Human human = hasan.bornChild(Genders.FEMALE);
+            System.out.println(human.getName());
+            family.addChild(human);
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
+
+        System.out.println("-----------------------------------");
 
         System.out.println("-----------------------------------");
         family.printChildren();

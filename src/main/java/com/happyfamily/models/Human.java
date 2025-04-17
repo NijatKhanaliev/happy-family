@@ -188,8 +188,7 @@ public class Human implements HumanCreator {
     @Override
     public Human bornChild(Genders type) {
         if(this.getFamily()==null || this instanceof Man){
-            System.out.println("You cannot born...");
-            return null;
+            throw new IllegalArgumentException("You cannot born...");
         }
 
         if (this instanceof Woman){

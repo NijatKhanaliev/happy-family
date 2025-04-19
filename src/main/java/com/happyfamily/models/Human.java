@@ -205,7 +205,6 @@ public class Human implements HumanCreator {
                 human.setDateOfBirth(LocalDate.now().getYear());
                 human.setIq(iq);
                 human.setSurname(this.family.getFather().getSurname());
-                System.out.println("samlamamkaksdk" + nameList[randomIndex]);
                 human.setName(nameList[randomIndex]);
 
                 this.family.addChild(human);

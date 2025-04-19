@@ -69,6 +69,11 @@ public class Family{
     }
 
     public void addChild(Human child) {
+        if(isChildExists(child)){
+            System.out.println("child already exists.");
+            return;
+        }
+
         Human[] newChildren = new Human[children.length + 1];
 
         for (int i = 0; i < children.length; i++) {
@@ -157,6 +162,15 @@ public class Family{
     public boolean isChildExistsByName(String name){
         for(Human arr : children){
             if(arr.getName().equalsIgnoreCase(name)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isChildExists(Human human){
+        for(Human arr : children){
+            if(arr.equals(human)){
                 return true;
             }
         }

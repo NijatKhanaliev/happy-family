@@ -1,13 +1,19 @@
 package com.happyfamily.models;
 
-import java.util.Arrays;
-import java.util.Objects;
+import com.happyfamily.enums.Genders;
+import com.happyfamily.interfaces.HumanCreator;
 
-public class Family{
+import java.time.LocalDate;
+import java.util.Objects;
+import java.util.Random;
+
+public class Family implements HumanCreator {
     private final Human father;
     private final Human mother;
     private Human[] children = new Human[0];
     private Pet pet;
+
+    private final String[] nameList = {"Amal", "Samir", "Kamil", "Qabil", "Rasul", "Elcan"};
 
     static {
         System.out.println("Class name: " + Family.class.getName());
@@ -69,7 +75,7 @@ public class Family{
     }
 
     public void addChild(Human child) {
-        if(isChildExists(child)){
+        if (isChildExists(child)) {
             System.out.println("child already exists.");
             return;
         }
@@ -153,24 +159,29 @@ public class Family{
         for (Human arr : children) {
             System.out.println(arr.fullName());
         }
+
     }
 
     public int countOfMember() {
-        return children.length + 3;
+        if(pet==null){
+            return children.length + 2;
+        }else{
+            return children.length + 3;
+        }
     }
 
-    public boolean isChildExistsByName(String name){
-        for(Human arr : children){
-            if(arr.getName().equalsIgnoreCase(name)){
+    public boolean isChildExistsByName(String name) {
+        for (Human arr : children) {
+            if (arr.getName().equalsIgnoreCase(name)) {
                 return true;
             }
         }
         return false;
     }
 
-    public boolean isChildExists(Human human){
-        for(Human arr : children){
-            if(arr.equals(human)){
+    public boolean isChildExists(Human human) {
+        for (Human arr : children) {
+            if (arr.equals(human)) {
                 return true;
             }
         }
@@ -179,15 +190,21 @@ public class Family{
 
     @Override
     public String toString() {
-        String childrenResult = "0";
 
+        StringBuilder stringBuilder = new StringBuilder();
         if (children.length != 0) {
-            childrenResult = Arrays.toString(children);
+            for (Human child : children) {
+                stringBuilder.append(child.getName());
+            }
+        } else {
+            stringBuilder.append("0");
         }
+
+
         return "Family{" +
                 "father=" + father.fullName() +
                 ", mother=" + mother.fullName() +
-                ", children=" + childrenResult +
+                ", children=" + stringBuilder +
                 ", pet=" + pet.toString() +
                 '}';
     }
@@ -206,4 +223,38 @@ public class Family{
         return Objects.hash(father, mother, pet);
     }
 
+    @Override
+    public Human bornChild() {
+        int iq = (this.father.getIq() + this.mother.getIq()) / 2;
+        Random random = new Random();
+        int randomIndex = random.nextInt(nameList.length);
+
+        while (this.isChildExistsByName(nameList[randomIndex])) {
+            randomIndex = random.nextInt(nameList.length);
+        }
+        int randomNum = random.nextInt(2);
+        Genders type = randomNum == 0 ? Genders.MALE : Genders.FEMALE;
+
+        if (type.equals(Genders.MALE)) {
+            Man human = new Man();
+            human.setDateOfBirth(LocalDate.now().getYear());
+            human.setIq(iq);
+            human.setSurname(this.father.getSurname());
+            human.setName(nameList[randomIndex]);
+
+            this.addChild(human);
+
+            return human;
+        } else {
+            Woman human = new Woman();
+            human.setDateOfBirth(LocalDate.now().getYear());
+            human.setIq(iq);
+            human.setSurname(this.father.getSurname());
+            human.setName(nameList[randomIndex]);
+
+            this.addChild(human);
+
+            return human;
+        }
+    }
 }

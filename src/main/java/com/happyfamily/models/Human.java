@@ -1,22 +1,17 @@
 package com.happyfamily.models;
 
-import com.happyfamily.enums.Genders;
-import com.happyfamily.interfaces.HumanCreator;
-
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Random;
 
-public class Human implements HumanCreator {
+public class Human {
     private String name;
     private String surname;
     private Integer dateOfBirth;
     private Integer iq;
     private String[][] schedule;
     private Family family;
-
-    private final String[] nameList = {"Amal","Samir","Kamil","Qabil","Rasul","Elcan"};
 
     static {
         System.out.println("Class name: " + Human.class.getName());
@@ -132,7 +127,20 @@ public class Human implements HumanCreator {
     }
 
     public void describePet() {
+        if(this.family==null){
+            System.out.println("You do not have family");
+            return;
+        }else if(family.getPet()==null){
+            System.out.println("You do not have a pet");
+            return;
+        }
+
         String result = "sly";
+
+        if(family.getPet().getAge()==null){
+            System.out.println("pet age is null");
+            return;
+        }
 
         if (family.getPet().getAge() > 50) {
             result = "very sly";
@@ -185,59 +193,18 @@ public class Human implements HumanCreator {
                 '}';
     }
 
-    @Override
-    public Human bornChild(Genders type) {
-        if(this.getFamily()==null || this instanceof Man){
-            throw new IllegalArgumentException("You cannot born...");
-        }
 
-        if (this instanceof Woman){
-            int iq = (this.getFamily().getFather().getIq() + this.getFamily().getMother().getIq()) / 2;
-            Random random = new Random();
-            int randomIndex = random.nextInt(nameList.length);
+@Override
+public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Human human = (Human) o;
+    return Objects.equals(name, human.name) && Objects.equals(surname, human.surname)
+            && Objects.equals(dateOfBirth, human.dateOfBirth);
+}
 
-            while(this.family.isChildExistsByName(nameList[randomIndex])){
-                randomIndex = random.nextInt(nameList.length);
-            }
-
-            if (type.name().equalsIgnoreCase("MAN")) {
-                Man human = new Man();
-                human.setDateOfBirth(LocalDate.now().getYear());
-                human.setIq(iq);
-                human.setSurname(this.family.getFather().getSurname());
-                human.setName(nameList[randomIndex]);
-
-                this.family.addChild(human);
-
-                return human;
-            } else {
-                Woman human = new Woman();
-                human.setDateOfBirth(LocalDate.now().getYear());
-                human.setIq(iq);
-                human.setSurname(this.family.getFather().getSurname());
-                human.setName(nameList[randomIndex]);
-
-                this.family.addChild(human);
-
-                return human;
-            }
-        }
-
-        return null;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Human human = (Human) o;
-        return Objects.equals(name, human.name) && Objects.equals(surname, human.surname)
-                && Objects.equals(dateOfBirth, human.dateOfBirth);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, surname, dateOfBirth);
-    }
-
+@Override
+public int hashCode() {
+    return Objects.hash(name, surname, dateOfBirth);
+}
 }

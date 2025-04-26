@@ -21,7 +21,7 @@ public abstract class Pet {
     }
 
     public Pet() {
-
+        this.species = Species.UNKNOWN;
     }
 
     public Pet(String nickname) {

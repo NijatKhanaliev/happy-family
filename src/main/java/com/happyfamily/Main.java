@@ -37,6 +37,8 @@ public class Main {
         hasan.setIq(64);
         hasan.setSchedule(johnSchedule);
 
+        hasan.describePet();
+
         Human karim = new Man("karim", "abdullayev", 2019);
         karim.setIq(14);
         karim.setSchedule(johnSchedule);
@@ -47,34 +49,32 @@ public class Main {
 
 
         Family family = new Family(karim,sabina);
+        Dog dog = new Dog();
+        dog.setNickname("dog1");
+        family.setPet(dog);
+        sabina.describePet();
 
-        Human child1 = sabina.bornChild(Genders.MALE);
-        Human child2 = sabina.bornChild(Genders.FEMALE);
-        Human child3 = sabina.bornChild(Genders.MALE);
 
         family.printChildren();
 
-        family.deleteChild(0);
-        family.deleteChild(child2);
+        System.out.println("-----------------------------");
 
-        System.out.println("-----------------------------------");
+        Human child1 = family.bornChild();
+        family.bornChild();
+        family.bornChild();
+        family.bornChild();
+
         family.printChildren();
 
-        System.out.println("-----------------------------------");
-
-        try {
-            Human human = hasan.bornChild(Genders.FEMALE);
-            System.out.println(human.getName());
-            family.addChild(human);
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
-        }
-
-        System.out.println("-----------------------------------");
+        family.deleteChild(1);
 
         System.out.println("-----------------------------------");
         family.printChildren();
 
+        family.deleteChild(child1);
+
+        System.out.println("-------------------------");
+        family.printChildren();
 
         try {
             Pet pet = new Fish();

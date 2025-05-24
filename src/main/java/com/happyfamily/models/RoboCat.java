@@ -1,7 +1,5 @@
 package com.happyfamily.models;
 
-import com.happyfamily.interfaces.Foulable;
-
 public class RoboCat extends Pet implements Foulable {
     @Override
     public void respond() {

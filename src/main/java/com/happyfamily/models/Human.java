@@ -24,7 +24,9 @@ public class Human {
     }
 
     public Human() {
-
+        this.iq=80;
+        this.name="unknown";
+        this.surname="unknown";
     }
 
     public Human(String name, String surname, Integer dateOfBirth) {
@@ -35,6 +37,7 @@ public class Human {
         this.name = name;
         this.surname = surname;
         this.dateOfBirth = dateOfBirth;
+        this.iq = 80;
     }
 
 

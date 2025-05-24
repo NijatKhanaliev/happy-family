@@ -1,4 +1,4 @@
-package com.happyfamily.interfaces;
+package com.happyfamily.models;
 
 public interface Foulable {
    default void foul(){

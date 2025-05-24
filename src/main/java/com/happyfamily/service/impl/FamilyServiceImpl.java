@@ -1,6 +1,7 @@
 package com.happyfamily.service.impl;
 
 import com.happyfamily.dao.FamilyDao;
+import com.happyfamily.exceptions.InvalidCreateFamilyRequest;
 import com.happyfamily.models.*;
 import com.happyfamily.service.FamilyService;
 
@@ -76,10 +77,13 @@ public class FamilyServiceImpl implements FamilyService {
     @Override
     public Family createNewFamily(Human man, Human woman) {
         Family family = new Family(man,woman);
+        if(!familyDao.getAllFamilies().contains(family)){
+            familyDao.saveFamily(family);
 
-        familyDao.saveFamily(family);
+            return family;
+        }
 
-        return family;
+        throw new InvalidCreateFamilyRequest("You are already married");
     }
 
     @Override
@@ -90,11 +94,11 @@ public class FamilyServiceImpl implements FamilyService {
     @Override
     public Family bornChild(Family family, String masculineName, String feminineName) {
         Random random = new Random();
-        int num = random.nextInt(2);
+        boolean isBoy = random.nextBoolean();
         int iq = (family.getFather().getIq() + family.getMother().getIq()) / 2;
 
         Human human;
-        if(num==0){
+        if(isBoy){
             human = new Man();
             human.setName(masculineName);
         }else{

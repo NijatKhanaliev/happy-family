@@ -1,7 +1,6 @@
 package com.happyfamily.models;
 
 import com.happyfamily.enums.Genders;
-import com.happyfamily.interfaces.HumanCreator;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -10,7 +9,7 @@ public class Family implements HumanCreator {
     private final Human father;
     private final Human mother;
     private List<Human> children = new ArrayList<>();
-    private Set<Pet> pet;
+    private Set<Pet> pet = new HashSet<>();
 
     private final List<String> nameList = List.of("Amal", "Samir", "Kamil", "Qabil", "Rasul", "Elcan");
 
@@ -93,11 +92,10 @@ public class Family implements HumanCreator {
         return true;
     }
 
-    public boolean deleteChild(Human child) {
+    public void deleteChild(Human child) {
+        System.out.println(child.getName());
         child.setFamily(null);
         children.remove(child);
-
-        return true;
     }
 
     public void printChildren() {

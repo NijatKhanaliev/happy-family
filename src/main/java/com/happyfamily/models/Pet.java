@@ -2,7 +2,6 @@ package com.happyfamily.models;
 
 import com.happyfamily.enums.Species;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -23,6 +22,7 @@ public abstract class Pet {
 
     public Pet() {
         this.species = Species.UNKNOWN;
+        this.nickname = "unknown";
     }
 
     public Pet(String nickname) {
@@ -82,7 +82,7 @@ public abstract class Pet {
         this.trickLevel = trickLevel;
     }
 
-    public void printHabits(){
+    public void printHabits() {
         System.out.println(habits);
     }
 

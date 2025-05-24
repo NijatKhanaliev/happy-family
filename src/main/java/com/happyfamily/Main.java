@@ -1,9 +1,15 @@
 package com.happyfamily;
 
 
+import com.happyfamily.controller.FamilyController;
+import com.happyfamily.dao.FamilyDao;
+import com.happyfamily.dao.impl.CollectionFamilyDao;
 import com.happyfamily.enums.DayOfWeek;
 import com.happyfamily.models.*;
+import com.happyfamily.service.FamilyService;
+import com.happyfamily.service.impl.FamilyServiceImpl;
 
+import java.time.LocalDate;
 import java.util.*;
 
 public class Main {
@@ -23,77 +29,60 @@ public class Main {
         dogHabits.add("eat");
         dogHabits.add("sleep");
 
+        Human man = new Man("samir","hasanov",1984);
+        man.setIq(85);
+        Human woman = new Woman("leman","cavadov",2000);
+        woman.setIq(90);
 
-        try {
-            Human john = new Man("john", "abdullayev", 1998);
-            john.setIq(82);
-            john.setSchedule(johnSchedule);
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
-        }
+        Human man1 = new Man("kamil","qasanov",1994);
+        man1.setIq(95);
+        Human woman1 = new Woman("samira","zeynalova",1998);
+        woman1.setIq(75);
 
-        Human alisa = new Woman("alisa", "aydanov", 2000);
-        alisa.setIq(74);
-        alisa.setSchedule(johnSchedule);
+        Human human = new Man("rasul","ahmadov",2015);
+        human.setIq(99);
 
-        System.out.println(alisa);
+        FamilyDao familyDao = new CollectionFamilyDao();
+        FamilyService familyService = new FamilyServiceImpl(familyDao);
+        FamilyController familyController = new FamilyController(familyService);
 
-        Human hasan = new Man("hasan", "abdullayev", 2021);
-        hasan.setIq(64);
-        hasan.setSchedule(johnSchedule);
+        Family family = familyController.createNewFamily(man,woman);
+        Family family1 = familyController.createNewFamily(man1,woman1);
 
-        hasan.describePet();
+        System.out.println(familyController.getAllFamilies());
 
-        Human karim = new Man("karim", "abdullayev", 2019);
-        karim.setIq(14);
-        karim.setSchedule(johnSchedule);
+        Family family2 = familyController.bornChild(family,"senan","aydan");
 
-        Human sabina = new Woman("sabina", "hasanova", 2021);
-        sabina.setIq(72);
-        sabina.setSchedule(johnSchedule);
+        Family family3 = familyController.bornChild(family1,"hasan","nilay");
 
+        familyController.adoptChild(family2,human);
 
-        Family family = new Family(karim, sabina);
+        System.out.println(familyController.getFamilyById(0));
+
         Dog dog = new Dog();
-        dog.setNickname("dog1");
-        Set<Pet> pets = new HashSet<>();
-        pets.add(dog);
+        dog.setHabits(dogHabits);
 
-        family.setPet(pets);
-        sabina.describePet();
+        familyController.addPet(0,dog);
+        familyController.addPet(0,new Fish());
+        familyController.addPet(1,new DomesticCat());
 
+        System.out.println(familyController.getAllFamilies());
 
-        family.printChildren();
+        System.out.println(familyController.count());
 
-        System.out.println("-----------------------------");
+        System.out.println(familyController.getFamilyById(0).getChildren());
 
-        Human child1 = family.bornChild();
-        family.bornChild();
-        family.bornChild();
-        family.bornChild();
+        familyController.deleteAllChildrenOlderThan(5);
 
-        family.printChildren();
+        System.out.println(familyController.getFamilyById(0).getChildren());
 
-        family.deleteChild(1);
+        familyController.deleteFamilyByIndex(1);
 
-        System.out.println("-----------------------------------");
-        family.printChildren();
+        System.out.println(familyController.getAllFamilies());
 
-        family.deleteChild(child1);
+        familyController.createNewFamily(man,woman);
 
-        System.out.println("-------------------------");
-        family.printChildren();
-
-        try {
-            Pet pet = new Fish();
-            pet.setNickname("samir");
-            pet.setHabits(dogHabits);
-            pet.setTrickLevel(45); // throws exception trickLevel>100
-            pet.respond();
-            pet.eat();
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
-        }
+        System.out.println(familyController.getAllFamilies());
 
     }
 }

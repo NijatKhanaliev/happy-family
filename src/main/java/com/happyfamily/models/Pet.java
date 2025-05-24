@@ -2,15 +2,16 @@ package com.happyfamily.models;
 
 import com.happyfamily.enums.Species;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 public abstract class Pet {
     private Species species;
     private String nickname;
     private Integer age;
     private Integer trickLevel;
-    private String[] habits;
+    private Set<String> habits;
 
     static {
         System.out.println("Class name: " + Pet.class.getName());
@@ -29,7 +30,7 @@ public abstract class Pet {
         this.nickname = nickname;
     }
 
-    public Pet(String nickname, Integer age, Integer trickLevel, String[] habits) {
+    public Pet(String nickname, Integer age, Integer trickLevel, Set<String> habits) {
         if (trickLevel < 1 || trickLevel > 100) {
             throw new IllegalArgumentException("Trick level cannot be lower than 0 or bigger than 100");
         }
@@ -82,14 +83,14 @@ public abstract class Pet {
     }
 
     public void printHabits(){
-        System.out.println(Arrays.toString(habits));
+        System.out.println(habits);
     }
 
-    public String[] getHabits() {
+    public Set<String> getHabits() {
         return habits;
     }
 
-    public void setHabits(String[] habits) {
+    public void setHabits(Set<String> habits) {
         this.habits = habits;
     }
 
@@ -106,7 +107,7 @@ public abstract class Pet {
                 ", nickname='" + nickname + '\'' +
                 ", age=" + age +
                 ", trickLevel=" + trickLevel +
-                ", habits=" + Arrays.toString(habits) +
+                ", habits=" + habits +
                 ", canFly=" + species.isCanFly() +
                 ", numberOfLegs=" + species.getNumberOfLegs() +
                 ", hasFur=" + species.isHasFur() +

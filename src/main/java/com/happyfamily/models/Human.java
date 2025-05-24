@@ -1,7 +1,9 @@
 package com.happyfamily.models;
 
+import com.happyfamily.enums.DayOfWeek;
+
 import java.time.LocalDate;
-import java.util.Arrays;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 
@@ -10,7 +12,7 @@ public class Human {
     private String surname;
     private Integer dateOfBirth;
     private Integer iq;
-    private String[][] schedule;
+    private Map<DayOfWeek, String> schedule;
     private Family family;
 
     static {
@@ -36,7 +38,7 @@ public class Human {
     }
 
 
-    public Human(String name, String surname, Integer dateOfBirth, Integer iq, Family family, String[][] schedule) {
+    public Human(String name, String surname, Integer dateOfBirth, Integer iq, Family family, Map<DayOfWeek, String> schedule) {
         if (dateOfBirth < 1900 || dateOfBirth > LocalDate.now().getYear()) {
             throw new IllegalArgumentException("Year cannot be lower than 1900 or bigger than current year");
         }
@@ -89,11 +91,11 @@ public class Human {
         this.iq = iq;
     }
 
-    public String[][] getSchedule() {
+    public Map<DayOfWeek, String> getSchedule() {
         return schedule;
     }
 
-    public void setSchedule(String[][] schedule) {
+    public void setSchedule(Map<DayOfWeek, String> schedule) {
         this.schedule = schedule;
     }
 
@@ -110,16 +112,11 @@ public class Human {
     }
 
     public void greetPet() {
-        System.out.println("Hello, " + family.getPet().getNickname());
+        family.getPet().forEach((p) -> System.out.println("Hello " + p.getNickname()));
     }
 
     public void printSchedule() {
-        for (String[] arr : schedule) {
-            for (String str : arr) {
-                System.out.print(str + " ");
-            }
-            System.out.println();
-        }
+        System.out.println(schedule);
     }
 
     public String fullName() {
@@ -127,43 +124,43 @@ public class Human {
     }
 
     public void describePet() {
-        if(this.family==null){
+        if (this.family == null) {
             System.out.println("You do not have family");
             return;
-        }else if(family.getPet()==null){
+        } else if (family.getPet() == null) {
             System.out.println("You do not have a pet");
             return;
         }
 
         String result = "sly";
 
-        if(family.getPet().getAge()==null){
+        if (family.getPet().stream().findAny().get().getAge() == null) {
             System.out.println("pet age is null");
             return;
         }
 
-        if (family.getPet().getAge() > 50) {
+        if (family.getPet().stream().anyMatch((p) -> p.getTrickLevel() > 50)) {
             result = "very sly";
-        } else if (family.getPet().getAge() < 50) {
+        } else if (family.getPet().stream().anyMatch((p) -> p.getTrickLevel() < 50)) {
             result = "almost not sly";
         }
 
-        System.out.println("I have an " + family.getPet().getSpecies() + " is " + family.getPet().getAge() +
+        System.out.println("I have an " + family.getPet().stream().findAny().get().getSpecies() + " is " + family.getPet().stream().findAny().get().getAge() +
                 " years old, he is " + result);
     }
 
     public boolean feedPet(boolean isTimeToFeed) {
         if (isTimeToFeed) {
-            System.out.println("Hm... I will feed " + name + "'s " + family.getPet().getNickname());
+            System.out.println("Hm... I will feed " + name + "'s " + family.getPet().stream().findAny().get().getNickname());
             return true;
         } else {
             Random random = new Random();
             int randomNumber = random.nextInt(101);
-            if (randomNumber < family.getPet().getTrickLevel()) {
-                System.out.println("Hm... I will feed " + family.getPet().getNickname());
+            if (randomNumber < family.getPet().stream().findAny().get().getTrickLevel()) {
+                System.out.println("Hm... I will feed " + family.getPet().stream().findAny().get().getNickname());
                 return true;
             } else {
-                System.out.println("I think " + family.getPet().getNickname() + " is not hungry.");
+                System.out.println("I think " + family.getPet().stream().findAny().get() + " is not hungry.");
                 return false;
             }
         }
@@ -171,40 +168,27 @@ public class Human {
 
     @Override
     public String toString() {
-        String result = "No Schedule";
-
-        if (schedule.length != 0) {
-            StringBuilder scheduleResult = new StringBuilder("[");
-            for (String[] arr : schedule) {
-                scheduleResult.append(Arrays.toString(arr));
-            }
-            scheduleResult.append("]");
-
-            result = scheduleResult.toString();
-        }
-
-
         return "Human{" +
                 "name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", year=" + dateOfBirth +
                 ", iq=" + iq +
-                ", schedule=" + result +
+                ", schedule=" + schedule +
                 '}';
     }
 
 
-@Override
-public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    Human human = (Human) o;
-    return Objects.equals(name, human.name) && Objects.equals(surname, human.surname)
-            && Objects.equals(dateOfBirth, human.dateOfBirth);
-}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Human human = (Human) o;
+        return Objects.equals(name, human.name) && Objects.equals(surname, human.surname)
+                && Objects.equals(dateOfBirth, human.dateOfBirth);
+    }
 
-@Override
-public int hashCode() {
-    return Objects.hash(name, surname, dateOfBirth);
-}
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, surname, dateOfBirth);
+    }
 }

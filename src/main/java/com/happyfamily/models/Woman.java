@@ -15,7 +15,7 @@ public final class Woman extends Human {
 
     @Override
     public void greetPet() {
-        System.out.println("Hello Woman, " + super.getFamily().getPet().getNickname());
+        System.out.println("Hello Woman, " + super.getFamily().getPet().stream().findAny().get().getNickname());
     }
 
 }

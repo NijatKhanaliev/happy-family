@@ -2,23 +2,26 @@ package com.happyfamily;
 
 
 import com.happyfamily.enums.DayOfWeek;
-import com.happyfamily.enums.Genders;
 import com.happyfamily.models.*;
+
+import java.util.*;
 
 public class Main {
 
     public static void main(String[] args) {
-        String[][] johnSchedule = {
-                {DayOfWeek.MONDAY.name(), "go to university"},
-                {DayOfWeek.TUESDAY.name(), "go to course"},
-                {DayOfWeek.THURSDAY.name(), "go to shopping"},
-                {DayOfWeek.WEDNESDAY.name(), "play domino"},
-                {DayOfWeek.FRIDAY.name(), "go to university"},
-                {DayOfWeek.SATURDAY.name(), "go to football"},
-                {DayOfWeek.SUNDAY.name(), "rest"}
-        };
 
-        String[] dogHabits = {"eating", "sleeping"};
+        Map<DayOfWeek, String> johnSchedule = new HashMap<>();
+        johnSchedule.put(DayOfWeek.MONDAY, "go to university");
+        johnSchedule.put(DayOfWeek.TUESDAY, "go to course");
+        johnSchedule.put(DayOfWeek.THURSDAY, "go to shopping");
+        johnSchedule.put(DayOfWeek.WEDNESDAY, "play domino");
+        johnSchedule.put(DayOfWeek.FRIDAY, "go to university");
+        johnSchedule.put(DayOfWeek.SATURDAY, "go to football");
+        johnSchedule.put(DayOfWeek.SUNDAY, "rest");
+
+        Set<String> dogHabits = new HashSet<>();
+        dogHabits.add("eat");
+        dogHabits.add("sleep");
 
 
         try {
@@ -32,6 +35,8 @@ public class Main {
         Human alisa = new Woman("alisa", "aydanov", 2000);
         alisa.setIq(74);
         alisa.setSchedule(johnSchedule);
+
+        System.out.println(alisa);
 
         Human hasan = new Man("hasan", "abdullayev", 2021);
         hasan.setIq(64);
@@ -48,10 +53,13 @@ public class Main {
         sabina.setSchedule(johnSchedule);
 
 
-        Family family = new Family(karim,sabina);
+        Family family = new Family(karim, sabina);
         Dog dog = new Dog();
         dog.setNickname("dog1");
-        family.setPet(dog);
+        Set<Pet> pets = new HashSet<>();
+        pets.add(dog);
+
+        family.setPet(pets);
         sabina.describePet();
 
 
@@ -86,5 +94,6 @@ public class Main {
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
+
     }
 }

@@ -86,5 +86,17 @@ public class Main {
 
         System.out.println(familyController.getAllFamilies());
 
+        Man man2 = new Man();
+        man2.setName("kazim");
+
+        Woman woman2 = new Woman();
+        woman2.setName("kamila");
+
+        familyController.createNewFamily(man2,woman2);
+
+        System.out.println("------------------------------------");
+        System.out.println(familyController.getFamiliesBiggerThan(2) + " ------------bigger than");
+        System.out.println(familyController.getFamiliesLessThan(3) + " --------------- less than");
+
     }
 }

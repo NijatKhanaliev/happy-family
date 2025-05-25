@@ -14,7 +14,7 @@ import java.util.Set;
 public class FamilyServiceImpl implements FamilyService {
     private final FamilyDao familyDao;
 
-    public FamilyServiceImpl(FamilyDao familyDao){
+    public FamilyServiceImpl(FamilyDao familyDao) {
         this.familyDao = familyDao;
     }
 
@@ -26,24 +26,19 @@ public class FamilyServiceImpl implements FamilyService {
     @Override
     public void displayAllFamilies() {
         List<Family> allFamily = familyDao.getAllFamilies();
-        for (Family family : allFamily) {
-            System.out.println(family);
-        }
+        allFamily.forEach(System.out::println);
     }
 
     @Override
     public List<Family> getFamiliesBiggerThan(int peopleCount) {
         List<Family> allFamilies = familyDao.getAllFamilies();
         List<Family> newFamilyList = new ArrayList<>();
-        for (Family family : allFamilies) {
-            if (family.countOfPeople() > peopleCount) {
-                newFamilyList.add(family);
-            }
-        }
 
-        for (Family family : newFamilyList) {
-            System.out.println(family);
-        }
+        allFamilies.stream()
+                .filter((f) -> f.countOfPeople() > peopleCount)
+                .forEach(newFamilyList::add);
+
+        newFamilyList.forEach(System.out::println);
 
         return newFamilyList;
     }
@@ -52,11 +47,10 @@ public class FamilyServiceImpl implements FamilyService {
     public List<Family> getFamiliesLessThan(int peopleCount) {
         List<Family> allFamilies = familyDao.getAllFamilies();
         List<Family> newFamilyList = new ArrayList<>();
-        for (Family family : allFamilies) {
-            if (family.countOfPeople() < peopleCount) {
-                newFamilyList.add(family);
-            }
-        }
+
+        allFamilies.stream()
+                .filter((f) -> f.countOfPeople() < peopleCount)
+                .forEach(newFamilyList::add);
 
         return newFamilyList;
     }
@@ -65,9 +59,9 @@ public class FamilyServiceImpl implements FamilyService {
     public int countFamiliesWithMemberNumber(int memberCount) {
         List<Family> allFamilies = familyDao.getAllFamilies();
         int count = 0;
-        for(Family family : allFamilies){
-            if(family.countOfPeople()==memberCount){
-              count++;
+        for (Family family : allFamilies) {
+            if (family.countOfPeople() == memberCount) {
+                count++;
             }
         }
 
@@ -76,8 +70,8 @@ public class FamilyServiceImpl implements FamilyService {
 
     @Override
     public Family createNewFamily(Human man, Human woman) {
-        Family family = new Family(man,woman);
-        if(!familyDao.getAllFamilies().contains(family)){
+        Family family = new Family(man, woman);
+        if (!familyDao.getAllFamilies().contains(family)) {
             familyDao.saveFamily(family);
 
             return family;
@@ -98,10 +92,10 @@ public class FamilyServiceImpl implements FamilyService {
         int iq = (family.getFather().getIq() + family.getMother().getIq()) / 2;
 
         Human human;
-        if(isBoy){
+        if (isBoy) {
             human = new Man();
             human.setName(masculineName);
-        }else{
+        } else {
             human = new Woman();
             human.setName(feminineName);
         }
@@ -130,10 +124,10 @@ public class FamilyServiceImpl implements FamilyService {
     public void deleteAllChildrenOlderThan(int age) {
         List<Family> allFamilies = familyDao.getAllFamilies();
 
-        for(Family family : allFamilies){
+        for (Family family : allFamilies) {
             List<Human> children = family.getChildren();
             children.stream()
-                    .filter((c)->c.getAge()>age)
+                    .filter((c) -> c.getAge() > age)
                     .forEach(family::deleteChild);
 
             familyDao.saveFamily(family);

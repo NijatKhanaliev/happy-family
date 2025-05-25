@@ -57,6 +57,8 @@ public class Main {
 
         familyController.adoptChild(family2,human);
 
+        System.out.println(family2 +" ---------------------------------");
+
         System.out.println(familyController.getFamilyById(0));
 
         Dog dog = new Dog();

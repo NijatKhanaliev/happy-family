@@ -121,6 +121,8 @@ public class FamilyServiceImpl implements FamilyService {
         human.setFamily(family);
         family.addChild(human);
 
+        familyDao.saveFamily(family);
+
         return family;
     }
 

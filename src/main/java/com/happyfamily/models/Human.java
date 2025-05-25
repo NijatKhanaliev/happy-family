@@ -27,6 +27,7 @@ public class Human {
         this.iq=80;
         this.name="unknown";
         this.surname="unknown";
+        this.dateOfBirth = LocalDate.now().getYear();
     }
 
     public Human(String name, String surname, Integer dateOfBirth) {

@@ -1,17 +1,12 @@
 package com.happyfamily.models;
 
-import com.happyfamily.enums.Genders;
-
-import java.time.LocalDate;
 import java.util.*;
 
-public class Family implements HumanCreator {
+public class Family{
     private final Human father;
     private final Human mother;
     private List<Human> children = new ArrayList<>();
     private Set<Pet> pet = new HashSet<>();
-
-    private final List<String> nameList = List.of("Amal", "Samir", "Kamil", "Qabil", "Rasul", "Elcan");
 
     static {
         System.out.println("Class name: " + Family.class.getName());
@@ -171,38 +166,4 @@ public class Family implements HumanCreator {
         return Objects.hash(father, mother);
     }
 
-    @Override
-    public Human bornChild() {
-        int iq = (this.father.getIq() + this.mother.getIq()) / 2;
-        Random random = new Random();
-        int randomIndex = random.nextInt(nameList.size());
-
-        while (this.isChildExistsByName(nameList.get(randomIndex))) {
-            randomIndex = random.nextInt(nameList.size());
-        }
-        int randomNum = random.nextInt(2);
-        Genders type = randomNum == 0 ? Genders.MALE : Genders.FEMALE;
-
-        if (type.equals(Genders.MALE)) {
-            Man human = new Man();
-            human.setDateOfBirth(LocalDate.now().getYear());
-            human.setIq(iq);
-            human.setSurname(this.father.getSurname());
-            human.setName(nameList.get(randomIndex));
-
-            this.addChild(human);
-
-            return human;
-        } else {
-            Woman human = new Woman();
-            human.setDateOfBirth(LocalDate.now().getYear());
-            human.setIq(iq);
-            human.setSurname(this.father.getSurname());
-            human.setName(nameList.get(randomIndex));
-
-            this.addChild(human);
-
-            return human;
-        }
-    }
 }

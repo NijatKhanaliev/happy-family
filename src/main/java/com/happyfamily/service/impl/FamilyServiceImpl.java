@@ -58,14 +58,10 @@ public class FamilyServiceImpl implements FamilyService {
     @Override
     public int countFamiliesWithMemberNumber(int memberCount) {
         List<Family> allFamilies = familyDao.getAllFamilies();
-        int count = 0;
-        for (Family family : allFamilies) {
-            if (family.countOfPeople() == memberCount) {
-                count++;
-            }
-        }
 
-        return count;
+       return (int) allFamilies.stream()
+                .filter((f)->f.countOfPeople()==memberCount)
+                .count();
     }
 
     @Override

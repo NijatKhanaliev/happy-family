@@ -98,5 +98,7 @@ public class Main {
         System.out.println(familyController.getFamiliesBiggerThan(2) + " ------------bigger than");
         System.out.println(familyController.getFamiliesLessThan(3) + " --------------- less than");
 
+
+        System.out.println(familyController.countFamiliesWithMemberNumber(2));
     }
 }

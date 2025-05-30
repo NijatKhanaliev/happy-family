@@ -5,7 +5,7 @@ public final class Woman extends Human {
     public Woman() {
     }
 
-    public Woman(String name, String surname, Integer dateOfBirth) {
+    public Woman(String name, String surname, String dateOfBirth) {
         super(name, surname, dateOfBirth);
     }
 

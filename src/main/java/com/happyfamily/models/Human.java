@@ -2,7 +2,11 @@ package com.happyfamily.models;
 
 import com.happyfamily.enums.DayOfWeek;
 
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
@@ -10,10 +14,12 @@ import java.util.Random;
 public class Human {
     private String name;
     private String surname;
-    private Integer dateOfBirth;
+    private long birthDate;
     private Integer iq;
     private Map<DayOfWeek, String> schedule;
     private Family family;
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
 
     static {
         System.out.println("Class name: " + Human.class.getName());
@@ -29,29 +35,28 @@ public class Human {
         this.surname="unknown";
     }
 
-    public Human(String name, String surname, Integer dateOfBirth) {
-        if (dateOfBirth < 1900 || dateOfBirth > LocalDate.now().getYear()) {
-            throw new IllegalArgumentException("Year cannot be lower than 1900 or bigger than current year");
-        }
-
+    public Human(String name, String surname, String birthDate) {
         this.name = name;
         this.surname = surname;
-        this.dateOfBirth = dateOfBirth;
         this.iq = 80;
+        LocalDate date = LocalDate.parse(birthDate, formatter);
+        if (date.isBefore(LocalDate.of(1900, 1, 1)) || date.isAfter(LocalDate.now())) {
+            throw new IllegalArgumentException("Year cannot be lower than 1900 or bigger than current year");
+        }
+        this.birthDate = date.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli();
     }
 
-
-    public Human(String name, String surname, Integer dateOfBirth, Integer iq, Family family, Map<DayOfWeek, String> schedule) {
-        if (dateOfBirth < 1900 || dateOfBirth > LocalDate.now().getYear()) {
-            throw new IllegalArgumentException("Year cannot be lower than 1900 or bigger than current year");
-        }
-
+    public Human(String name, String surname, String birthDate, Integer iq, Family family, Map<DayOfWeek, String> schedule) {
         this.name = name;
         this.surname = surname;
-        this.dateOfBirth = dateOfBirth;
         this.iq = iq;
         this.schedule = schedule;
         this.family = family;
+        LocalDate date = LocalDate.parse(birthDate, formatter);
+        if (date.isBefore(LocalDate.of(1900, 1, 1)) || date.isAfter(LocalDate.now())) {
+            throw new IllegalArgumentException("Year cannot be lower than 1900 or bigger than current year");
+        }
+        this.birthDate = date.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli();
     }
 
     public String getName() {
@@ -70,16 +75,17 @@ public class Human {
         this.surname = surname;
     }
 
-    public Integer getDateOfBirth() {
-        return dateOfBirth;
+    public String getBirthDate() {
+        LocalDate date = Instant.ofEpochMilli(birthDate).atZone(ZoneId.systemDefault()).toLocalDate();
+        return date.format(formatter);
     }
 
-    public void setDateOfBirth(Integer dateOfBirth) {
-        if (dateOfBirth < 1900 || dateOfBirth > LocalDate.now().getYear()) {
+    public void setBirthDate(String birthDate) {
+        LocalDate date = LocalDate.parse(birthDate, formatter);
+        if (date.isBefore(LocalDate.of(1900, 1, 1)) || date.isAfter(LocalDate.now())) {
             throw new IllegalArgumentException("Year cannot be lower than 1900 or bigger than current year");
         }
-
-        this.dateOfBirth = dateOfBirth;
+        this.birthDate = date.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli();
     }
 
     public Integer getIq() {
@@ -106,12 +112,23 @@ public class Human {
         return family;
     }
 
+    public int getAge() {
+        return LocalDate.now().getYear() - Instant.ofEpochMilli(birthDate)
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate().getYear();
+    }
+
     public void setFamily(Family family) {
         this.family = family;
     }
 
-    public int getAge() {
-        return LocalDate.now().getYear() - dateOfBirth;
+    public String describeAge() {
+        LocalDate birth = Instant.ofEpochMilli(birthDate)
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+        Period age = Period.between(birth, LocalDate.now());
+        return String.format("%d years, %d months, %d days",
+                age.getYears(), age.getMonths(), age.getDays());
     }
 
     public void greetPet() {
@@ -174,7 +191,10 @@ public class Human {
         return "Human{" +
                 "name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
-                ", year=" + dateOfBirth +
+                ", birth date=" + Instant.ofEpochMilli(birthDate)
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate()
+                .format(formatter) +
                 ", iq=" + iq +
                 ", schedule=" + schedule +
                 '}';
@@ -187,11 +207,11 @@ public class Human {
         if (o == null || getClass() != o.getClass()) return false;
         Human human = (Human) o;
         return Objects.equals(name, human.name) && Objects.equals(surname, human.surname)
-                && Objects.equals(dateOfBirth, human.dateOfBirth);
+                && Objects.equals(birthDate, human.birthDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, surname, dateOfBirth);
+        return Objects.hash(name, surname, birthDate);
     }
 }

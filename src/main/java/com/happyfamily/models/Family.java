@@ -3,6 +3,8 @@ package com.happyfamily.models;
 import com.happyfamily.enums.Genders;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class Family implements HumanCreator {
@@ -10,6 +12,8 @@ public class Family implements HumanCreator {
     private final Human mother;
     private List<Human> children = new ArrayList<>();
     private Set<Pet> pet = new HashSet<>();
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
 
     private final List<String> nameList = List.of("Amal", "Samir", "Kamil", "Qabil", "Rasul", "Elcan");
 
@@ -185,7 +189,7 @@ public class Family implements HumanCreator {
 
         if (type.equals(Genders.MALE)) {
             Man human = new Man();
-            human.setDateOfBirth(LocalDate.now().getYear());
+            human.setBirthDate(String.valueOf(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()));
             human.setIq(iq);
             human.setSurname(this.father.getSurname());
             human.setName(nameList.get(randomIndex));
@@ -195,7 +199,7 @@ public class Family implements HumanCreator {
             return human;
         } else {
             Woman human = new Woman();
-            human.setDateOfBirth(LocalDate.now().getYear());
+            human.setBirthDate(String.valueOf(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()));
             human.setIq(iq);
             human.setSurname(this.father.getSurname());
             human.setName(nameList.get(randomIndex));

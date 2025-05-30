@@ -6,6 +6,7 @@ import com.happyfamily.models.*;
 import com.happyfamily.service.FamilyService;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -108,8 +109,7 @@ public class FamilyServiceImpl implements FamilyService {
         human.setFamily(family);
         human.setIq(iq);
         human.setSurname(family.getFather().getSurname());
-        human.setDateOfBirth(LocalDate.now().getYear());
-
+        human.setBirthDate(String.valueOf(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()));
         family.addChild(human);
         familyDao.saveFamily(family);
 
@@ -131,12 +131,11 @@ public class FamilyServiceImpl implements FamilyService {
         for(Family family : allFamilies){
             List<Human> children = family.getChildren();
             children.stream()
-                    .filter((c)->c.getAge()>age)
+                    .filter((c)->c.getAge() > age)
                     .forEach(family::deleteChild);
 
             familyDao.saveFamily(family);
         }
-
     }
 
     @Override

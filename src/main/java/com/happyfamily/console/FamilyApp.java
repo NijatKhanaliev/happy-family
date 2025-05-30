@@ -1,4 +1,4 @@
-package com.happyfamily;
+package com.happyfamily.console;
 
 
 import com.happyfamily.controller.FamilyController;
@@ -9,10 +9,9 @@ import com.happyfamily.models.*;
 import com.happyfamily.service.FamilyService;
 import com.happyfamily.service.impl.FamilyServiceImpl;
 
-import java.time.LocalDate;
 import java.util.*;
 
-public class Main {
+public class FamilyApp {
 
     public static void main(String[] args) {
 
@@ -20,7 +19,7 @@ public class Main {
         johnSchedule.put(DayOfWeek.MONDAY, "go to university");
         johnSchedule.put(DayOfWeek.TUESDAY, "go to course");
         johnSchedule.put(DayOfWeek.THURSDAY, "go to shopping");
-        johnSchedule.put(DayOfWeek.WEDNESDAY, "play domino");
+        johnSchedule.put(DayOfWeek.WEDNESDAY, "play domino"); // Lol
         johnSchedule.put(DayOfWeek.FRIDAY, "go to university");
         johnSchedule.put(DayOfWeek.SATURDAY, "go to football");
         johnSchedule.put(DayOfWeek.SUNDAY, "rest");
@@ -29,17 +28,17 @@ public class Main {
         dogHabits.add("eat");
         dogHabits.add("sleep");
 
-        Human man = new Man("samir","hasanov",1984);
+        Human man = new Man("samir","hasanov","03/04/1984");
         man.setIq(85);
-        Human woman = new Woman("leman","cavadov",2000);
+        Human woman = new Woman("leman","cavadov","06/11/2000");
         woman.setIq(90);
 
-        Human man1 = new Man("kamil","qasanov",1994);
+        Human man1 = new Man("kamil","qasanov","15/08/1990");
         man1.setIq(95);
-        Human woman1 = new Woman("samira","zeynalova",1998);
+        Human woman1 = new Woman("samira","zeynalova","01/01/1998");
         woman1.setIq(75);
 
-        Human human = new Man("rasul","ahmadov",2015);
+        Human human = new Man("rasul","ahmadov","15/05/2015");
         human.setIq(99);
 
         FamilyDao familyDao = new CollectionFamilyDao();
@@ -84,5 +83,8 @@ public class Main {
 
         System.out.println(familyController.getAllFamilies());
 
+        human.setBirthDate("03/03/2010");
+        System.out.println(human.getBirthDate());
+        System.out.println(human.describeAge());
     }
 }
